@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -21,14 +21,31 @@ public class AnalysisService {
 
     private final PythonConfig pythonConfig;
 
-    public ResponseEntity<ResponseMessage> getAnalysisResult(String fileName) {
-        return restTemplate()
-                .postForEntity(
-                        pythonConfig.getServerUrl(),
-                        null,
-                        ResponseMessage.class,
-                        Collections.singletonMap("filename", fileName)
-                );
+    public ResponseEntity<ResponseMessage> initialize(String namedPhotosKey) {
+
+        final var body = Map.of(
+                "namedPhotosKey", namedPhotosKey
+        );
+
+        return doPost("/initialize", body);
     }
 
+    public ResponseEntity<ResponseMessage> getAnalysisResult(String targetImageName, String familyImageName) {
+
+        final var body = Map.of(
+                "targetImageName", targetImageName,
+                "familyImageName", familyImageName
+        );
+
+        return doPost("/analyze", body);
+    }
+
+    private ResponseEntity<ResponseMessage> doPost(String endPoint, Map<String, String> body) {
+        return restTemplate()
+                .postForEntity(
+                        pythonConfig.getServerUrl() + endPoint,
+                        body,
+                        ResponseMessage.class
+                );
+    }
 }

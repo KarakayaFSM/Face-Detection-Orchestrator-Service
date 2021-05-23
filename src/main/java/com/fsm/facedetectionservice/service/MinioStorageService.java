@@ -44,11 +44,6 @@ public class MinioStorageService {
     }
 
     private MinioClient getMinioClient() {
-
-        System.out.println("MINIO_ACCESS_NAME: " + config.getMinioAccessName());
-        System.out.println("MINIO_ACCESS_SECRET: " + config.getMinioAccessSecret());
-        System.out.println("MINIO_URL: " + config.getMinioURL());
-
         return MinioClient.builder()
                 .endpoint(config.getMinioURL())
                 .credentials(
@@ -78,7 +73,13 @@ public class MinioStorageService {
         return args.bucket();
     }
 
-    public void save(MultipartFile file, String objectName) {
+    public String save(MultipartFile file) {
+        final var originalName = file.getOriginalFilename();
+        save(file, originalName);
+        return originalName;
+    }
+
+    private void save(MultipartFile file, String objectName) {
         try {
             final byte[] bytes = file.getInputStream().readAllBytes();
             minioClient.putObject(
