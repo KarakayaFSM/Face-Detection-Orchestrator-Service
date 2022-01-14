@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Data
 public class MinioConfig {
+
     @Value("${MINIO_ACCESS_NAME}")
     private String minioAccessName;
 
@@ -15,5 +16,4 @@ public class MinioConfig {
 
     @Value("${MINIO_URL}")
     private String minioURL;
-
 }

@@ -1,4 +1,4 @@
-package com.fsm.facedetectionservice.data.model;
+package com.fsm.facedetectionservice.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 public class ResponseMessage {
     private final UUID id = UUID.randomUUID();
-    String response;
-    String message;
-    Boolean success;
+    private String response;
+    private String message;
+    private Boolean success;
 }

@@ -1,7 +1,7 @@
 package com.fsm.facedetectionservice.service;
 
 import com.fsm.facedetectionservice.configuration.PythonConfig;
-import com.fsm.facedetectionservice.data.model.ResponseMessage;
+import com.fsm.facedetectionservice.data.ResponseMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
@@ -21,23 +21,32 @@ public class AnalysisService {
 
     private final PythonConfig pythonConfig;
 
-    public ResponseEntity<ResponseMessage> initialize(String namedPhotosKey) {
+    public ResponseEntity<ResponseMessage> initializeGroup(String namedPhotosKey) {
 
         final var body = Map.of(
-                "namedPhotosKey", namedPhotosKey
+                "groupPhoto", namedPhotosKey
         );
 
-        return doPost("/initialize", body);
+        return doPost("/initializeGroup", body);
     }
 
-    public ResponseEntity<ResponseMessage> getAnalysisResult(String targetImageName, String familyImageName) {
+    public ResponseEntity<ResponseMessage> listGroupMembers(String groupPhotoKey) {
+
+        final var body = Map.of(
+                "groupPhoto", groupPhotoKey
+        );
+
+        return doPost("/group/listMembers", body);
+    }
+
+    public ResponseEntity<ResponseMessage> searchPerson(String targetImageName, String familyImageName) {
 
         final var body = Map.of(
                 "targetImageName", targetImageName,
                 "familyImageName", familyImageName
         );
 
-        return doPost("/analyze", body);
+        return doPost("/searchPerson", body);
     }
 
     private ResponseEntity<ResponseMessage> doPost(String endPoint, Map<String, String> body) {
